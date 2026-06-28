@@ -437,3 +437,15 @@ body.stage-3 .fab-container {
     .fab-main-btn { width: 50px; height: 50px; }
     .fab-sub-btn { width: 42px; height: 42px; }
 }
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
