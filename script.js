@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const carData = await response.json();
             renderCarCards(carData);
         } catch (error) {
-            loadingElement.innerHTML = `<p style="color: #e74c3c;">Gagal memuat katalog mobil.</p>`;
+            loadingElement.innerHTML = `<p style="color: #e74c3c;">Gagal terhubung ke Server. Silahkan coba lagi</p>`;
         }
     }
 
