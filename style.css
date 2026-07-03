@@ -1,5 +1,12 @@
 /* --- RESET & DASAR --- */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    /* Menghilangkan efek kilasan biru (tap highlight) saat disentuh di HP/Tablet */
+    -webkit-tap-highlight-color: transparent; 
+}
+
 html { scroll-behavior: smooth; }
 body { background-color: #000000; color: #ffffff; font-family: 'Montserrat', sans-serif; min-height: 100vh; overflow-x: hidden; position: relative; }
 body::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 500px; background: linear-gradient(to top, rgba(197, 160, 89, 0.08), transparent); pointer-events: none; z-index: 1; }
@@ -36,7 +43,7 @@ body.stage-3 .showcase-container { opacity: 1; pointer-events: auto; }
 .car-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 60px; }
 
 /* --- LUXURY CARD DESAIN ASLI --- */
-.luxury-card { background: #0D0D0D; border: 1px solid rgba(197, 160, 89, 0.12); border-radius: 4px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; transform-origin: center center; }
+.luxury-card { background: #0D0D0D; border: 1px solid rgba(197, 160, 89, 0.12); border-radius: 4px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; transform-origin: center center; -webkit-tap-highlight-color: transparent; }
 .luxury-card:hover { transform: translateY(-10px); border-color: rgba(197, 160, 89, 0.4); box-shadow: 0 15px 40px rgba(197, 160, 89, 0.05); }
 
 /* Gambar kembali ke format Cover & Terpotong Rapi Sesuai Card Asli */
@@ -57,7 +64,7 @@ body.stage-3 .showcase-container { opacity: 1; pointer-events: auto; }
 .car-price { font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: #C5A059; font-weight: 500; letter-spacing: 1px; margin-top: auto; }
 
 /* --- EFEK BLUR SAAT MODE FOKUS --- */
-body.focus-active { overflow: hidden; } /* Kunci scroll body utama */
+body.focus-active { overflow: hidden; }
 body.focus-active #main-header,
 body.focus-active #main-footer,
 body.focus-active #showroom-logo,
@@ -74,25 +81,26 @@ body.focus-active #car-showcase-grid {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     background: rgba(0, 0, 0, 0.6); opacity: 0; z-index: 10000;
     pointer-events: none; transition: opacity 0.6s ease;
-    overflow-y: auto; /* Ini yang memungkinkan Seluruh Card di-scroll */
+    overflow-y: auto;
+    -webkit-tap-highlight-color: transparent;
 }
 body.focus-active #focus-overlay { opacity: 1; pointer-events: auto; }
 
 #focus-wrapper {
     min-height: 100%; display: flex; align-items: center; justify-content: center;
-    padding: 60px 20px; cursor: pointer; /* Klik diluar akan menutup */
+    padding: 60px 20px; cursor: pointer;
 }
 
 /* Kartu Asli saat dipindahkan ke Mode Fokus */
 .luxury-card.is-focused {
-    cursor: default; /* Kursor biasa saat di mode fokus */
+    cursor: default;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
     border-color: rgba(197, 160, 89, 0.5);
-    background: #0A0A0A; /* Sedikit digelapkan agar lebih elegan saat dibaca */
-    max-width: 450px; /* Lebar maksimal kartu */
+    background: #0A0A0A;
+    max-width: 450px;
     width: 100%;
 }
-.luxury-card.is-focused:hover { transform: scale(1.15) !important; /* Matikan efek melayang hover */ }
+.luxury-card.is-focused:hover { transform: scale(1.15) !important; }
 .luxury-card.is-focused .car-img { transform: none !important; }
 
 /* --- GALERI CAROUSEL (MUNCUL HANYA SAAT FOKUS) --- */
@@ -104,9 +112,11 @@ body.focus-active #focus-overlay { opacity: 1; pointer-events: auto; }
     font-size: 1.2rem; cursor: pointer; display: flex;
     justify-content: center; align-items: center;
     transition: all 0.3s ease; z-index: 10;
-    opacity: 0; pointer-events: none; /* Sembunyikan di grid */
+    opacity: 0; pointer-events: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
-.is-focused .carousel-btn { opacity: 1; pointer-events: auto; } /* Tampilkan saat fokus */
+.is-focused .carousel-btn { opacity: 1; pointer-events: auto; }
 .carousel-btn:hover { background: rgba(0, 0, 0, 0.9); border-color: #C5A059; box-shadow: 0 0 10px rgba(197,160,89,0.3); }
 .carousel-btn.left { left: 15px; }
 .carousel-btn.right { right: 15px; }
@@ -120,7 +130,7 @@ body.focus-active #focus-overlay { opacity: 1; pointer-events: auto; }
 footer { background-color: #050505; border-top: 1px solid rgba(197, 160, 89, 0.1); padding: 60px 20px; text-align: center; position: relative; z-index: 10; transition: filter 0.6s ease; }
 .footer-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; letter-spacing: 3px; color: #C5A059; margin-bottom: 30px; font-weight: 400; }
 .footer-social-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
-.footer-social-btn { background-color: #0d0d0d; color: #ffffff; text-decoration: none; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; padding: 12px 28px; border: 1px solid rgba(197, 160, 89, 0.25); border-radius: 2px; transition: all 0.4s ease; }
+.footer-social-btn { background-color: #0d0d0d; color: #ffffff; text-decoration: none; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; padding: 12px 28px; border: 1px solid rgba(197, 160, 89, 0.25); border-radius: 2px; transition: all 0.4s ease; -webkit-tap-highlight-color: transparent; }
 .footer-social-btn:hover { border-color: #C5A059; color: #C5A059; box-shadow: 0 0 15px rgba(197, 160, 89, 0.25); }
 .copyright { font-size: 0.75rem; color: #666666; letter-spacing: 1px; }
 
@@ -135,120 +145,6 @@ footer { background-color: #050505; border-top: 1px solid rgba(197, 160, 89, 0.1
     body.stage-2 .location-btn { right: 20px; font-size: 0.65rem; padding: 8px 12px; }
     .car-grid { grid-template-columns: 1fr; gap: 40px; }
 }
-
-/* --- TOMBOL WA MODE FOKUS --- */
-.focus-wa-container {
-    display: none; /* Sembunyikan saat di grid biasa */
-    margin-top: 25px;
-    text-align: center;
-    width: 100%;
-}
-
-.luxury-card.is-focused .focus-wa-container {
-    display: block; /* Munculkan saat kartu membesar ke tengah */
-    animation: fadeInBtn 0.6s ease forwards;
-}
-
-.focus-wa-btn {
-    display: inline-block;
-    background-color: #0d0d0d;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 14px 20px;
-    border: 1px solid rgba(197, 160, 89, 0.4);
-    border-radius: 4px;
-    transition: all 0.4s ease;
-    font-weight: 500;
-    width: 100%; /* Lebar penuh agar nyaman disentuh di HP */
-}
-
-.focus-wa-btn:hover {
-    border-color: #C5A059;
-    color: #C5A059;
-    background-color: rgba(197, 160, 89, 0.05);
-    box-shadow: 0 0 15px rgba(197, 160, 89, 0.25);
-}
-
-@keyframes fadeInBtn {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-/* --- STORY SECTION NARRATIVE --- */
-.story-scroll-spacer {
-    height: 250vh; /* Menyediakan kedalaman scroll untuk 5 kalimat */
-}
-
-#story-section {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 50; /* Di bawah logo header, di atas background biasa */
-    pointer-events: none;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
-    padding: 0 24px;
-    background-color: #000000; /* Mengunci layar hitam agar katalog di bawah tersembunyi dulu */
-}
-
-/* Aktif ketika Hero selesai mengecil ke header (Stage 3) */
-body.stage-3 #story-section {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Sembunyikan total ketika rangkaian cerita selesai dibaca semua */
-body.story-complete #story-section {
-    opacity: 0;
-    visibility: hidden;
-}
-
-.story-sentence {
-    position: absolute;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.85rem;
-    line-height: 1.6;
-    color: #C5A059; /* Emas Elegan */
-    text-align: center;
-    max-width: 850px;
-    opacity: 0;
-    transform: translateY(20px);
-    will-change: opacity, transform;
-    transition: opacity 0.1s linear, transform 0.1s linear; /* Dikontrol realtime oleh scroll JS */
-}
-
-/* Sembunyikan katalog mobil dan footer sebelum cerita selesai */
-#main-content, #main-footer {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-/* Tampilkan katalog secara premium saat cerita selesai dilewati */
-body.story-complete #main-content,
-body.story-complete #main-footer {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Responsivitas Layar HP */
-@media (max-width: 768px) {
-    .story-sentence {
-        font-size: 1.35rem;
-        line-height: 1.5;
-        padding: 0 10px;
-    }
-}
-
 
 /* --- TOMBOL WA MODE FOKUS --- */
 .focus-wa-container {
@@ -277,6 +173,7 @@ body.story-complete #main-footer {
     transition: all 0.4s ease;
     font-weight: 500;
     width: 100%;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .focus-wa-btn:hover {
@@ -291,9 +188,37 @@ body.story-complete #main-footer {
     100% { opacity: 1; transform: translateY(0); }
 }
 
-/* --- PERBAIKAN TIMING STORY SECTION (ANTI-OVERLAP) --- */
+/* --- STORY SECTION NARRATIVE --- */
 .story-scroll-spacer {
-    height: 300vh; /* Ditambah untuk memberikan ruang durasi diam yang ideal */
+    height: 300vh;
+}
+
+#story-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    padding: 0 24px;
+    background-color: #000000;
+}
+
+body.stage-3 #story-section {
+    opacity: 1;
+    visibility: visible;
+}
+
+body.story-complete #story-section {
+    opacity: 0;
+    visibility: hidden;
 }
 
 .story-sentence {
@@ -307,10 +232,28 @@ body.story-complete #main-footer {
     opacity: 0;
     transform: translateY(20px);
     will-change: opacity, transform;
-    /* Durasi transisi halus dan konsisten saat scroll dilewati */
     transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+#main-content, #main-footer {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+body.story-complete #main-content,
+body.story-complete #main-footer {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .story-sentence {
+        font-size: 1.35rem;
+        line-height: 1.5;
+        padding: 0 10px;
+    }
+}
 
 /* --- TOMBOL MENGAMBANG (QUICK CONTACT) STYLE --- */
 .fab-container {
@@ -325,23 +268,21 @@ body.story-complete #main-footer {
     transform: translateY(20px);
     pointer-events: none;
     transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Muncul hanya setelah Hero selesai mengecil ke header */
 body.stage-3 .fab-container {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
 }
 
-/* Sembunyikan dengan mulus ke bawah saat menyentuh footer */
 .fab-container.fab-hidden {
     transform: translateY(120px) !important;
     opacity: 0 !important;
     pointer-events: none !important;
 }
 
-/* Tombol Utama Lingkaran */
 .fab-main-btn {
     width: 56px;
     height: 56px;
@@ -358,6 +299,8 @@ body.stage-3 .fab-container {
     position: relative;
     z-index: 2;
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .fab-main-btn:hover {
@@ -373,12 +316,10 @@ body.stage-3 .fab-container {
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Animasi rotasi ikon chat ketika menu terbuka */
 .fab-container.active .fab-main-btn svg {
     transform: rotate(360deg);
 }
 
-/* Wadah Tombol Sosmed Anak */
 .fab-menu {
     display: flex;
     flex-direction: column;
@@ -408,6 +349,8 @@ body.stage-3 .fab-container {
     opacity: 0;
     transform: translateY(15px) scale(0.7);
     transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .fab-sub-btn:hover {
@@ -422,16 +365,14 @@ body.stage-3 .fab-container {
     fill: #ffffff;
 }
 
-/* Animasi Muncul Satu per Satu Berurutan (Staggered Effect) */
 .fab-container.active .fab-sub-btn {
     opacity: 1;
     transform: translateY(0) scale(1);
 }
-.fab-container.active .fab-sub-btn:nth-child(1) { transition-delay: 0.14s; } /* TikTok paling atas */
-.fab-container.active .fab-sub-btn:nth-child(2) { transition-delay: 0.07s; } /* Instagram tengah */
-.fab-container.active .fab-sub-btn:nth-child(3) { transition-delay: 0s; }    /* WA bawah dekat induk */
+.fab-container.active .fab-sub-btn:nth-child(1) { transition-delay: 0.14s; }
+.fab-container.active .fab-sub-btn:nth-child(2) { transition-delay: 0.07s; }
+.fab-container.active .fab-sub-btn:nth-child(3) { transition-delay: 0s; }
 
-/* Penyesuaian Responsif Layar HP */
 @media (max-width: 768px) {
     .fab-container { bottom: 20px; right: 20px; }
     .fab-main-btn { width: 50px; height: 50px; }

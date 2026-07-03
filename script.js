@@ -16,6 +16,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const fabContainer = document.getElementById("quick-contact");
     const fabMainBtn = document.getElementById("fab-main");
 
+    // --- SISTEM PRELOAD DAN CACHE GAMBAR ---
+    const preloadedImagesCache = new Set();
+
+    function preloadAdjacentImages(imagesArray, currentIndex) {
+        if (!imagesArray || imagesArray.length === 0) return;
+        const len = imagesArray.length;
+        
+        // Indeks berikutnya (looping ke 0 jika di akhir)
+        const nextIdx = (currentIndex === len - 1) ? 0 : currentIndex + 1;
+        // Indeks sebelumnya (looping ke akhir jika di 0)
+        const prevIdx = (currentIndex === 0) ? len - 1 : currentIndex - 1;
+
+        // Kumpulkan daftar gambar yang harus siap (Aktif, Berikutnya, Sebelumnya)
+        const targets = [imagesArray[currentIndex], imagesArray[nextIdx], imagesArray[prevIdx]];
+
+        targets.forEach(src => {
+            if (src && !preloadedImagesCache.has(src)) {
+                const img = new Image();
+                img.src = src;
+                preloadedImagesCache.add(src); // Tandai agar tidak dipreload ulang
+            }
+        });
+    }
+
     // --- SISTEM STATISTIK PENGUNJUNG ---
     function recordStat(column) {
         if (!statsApiEndpoint || statsApiEndpoint === "URL_WEB_APP_PENGUNJUNG") return;
@@ -40,16 +64,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (el) el.addEventListener('click', () => recordStat(col));
     };
 
-    // Mengaitkan tombol footer asli
     bindSocialTracking('btn-tiktok', 'A');
     bindSocialTracking('btn-ig', 'B');
     bindSocialTracking('btn-wa-footer', 'C');
-
-    // Mengaitkan tombol FAB mengambang baru (Gunakan link/fungsi yang sama persis)
     bindSocialTracking('fab-tiktok', 'A');
     bindSocialTracking('fab-ig', 'B');
     bindSocialTracking('fab-wa', 'C');
-
 
     // --- EVENT SCROLL DAN TRACKING VISUAL ---
     window.addEventListener("scroll", () => {
@@ -70,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 2. SISTEM SEGMENTASI INTERVAl STORY SECTION (ANTI TUMPANG TINDIH)
         const storyStart = vh * 0.65;
-        const sentenceDuration = vh * 0.55; // Durasi scroll per kalimat
+        const sentenceDuration = vh * 0.55;
         const totalSentences = 5;
         const storyEnd = storyStart + (sentenceDuration * totalSentences);
         const storySentences = document.querySelectorAll(".story-sentence");
@@ -82,22 +102,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 const sStart = storyStart + (idx * sentenceDuration);
                 const sEnd = sStart + sentenceDuration;
 
-                // Jika scroll berada tepat di dalam jendela kuota kalimat ini
                 if (scrollY >= sStart && scrollY < sEnd) {
-                    const progress = (scrollY - sStart) / sentenceDuration; // rentang nilai 0 sampai 1
+                    const progress = (scrollY - sStart) / sentenceDuration;
                     let opacity = 0;
                     let translateY = 20;
 
                     if (progress < 0.25) {
-                        // Fase Masuk Terpisah (0% -> 25% jangka scroll)
                         opacity = progress / 0.25;
                         translateY = 20 - (opacity * 20);
                     } else if (progress >= 0.25 && progress <= 0.75) {
-                        // Fase Diam Mengunci (25% -> 75% jangka scroll)
                         opacity = 1;
                         translateY = 0;
                     } else {
-                        // Fase Keluar Sempurna (75% -> 100% jangka scroll)
                         opacity = (1 - progress) / 0.25;
                         translateY = -((progress - 0.75) / 0.25) * 20;
                     }
@@ -105,11 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     sentence.style.opacity = Math.max(0, Math.min(1, opacity));
                     sentence.style.transform = `translateY(${translateY}px)`;
                 } else if (scrollY >= sEnd) {
-                    // Wajib bersih total jika sudah dilewati
                     sentence.style.opacity = 0;
                     sentence.style.transform = "translateY(-20px)";
                 } else {
-                    // Belum gilirannya muncul
                     sentence.style.opacity = 0;
                     sentence.style.transform = "translateY(20px)";
                 }
@@ -126,10 +140,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // 3. MONITORING PROTEKSI VIEWPORT FOOTER (FAB HIDING BEHAVIOR)
         if (mainFooter && fabContainer) {
             const footerRect = mainFooter.getBoundingClientRect();
-            // Jika bagian atas footer mulai menyembul masuk ke dalam layar viewport
             if (footerRect.top <= window.innerHeight) {
                 fabContainer.classList.add("fab-hidden");
-                fabContainer.classList.remove("active"); // Tutup menu anak otomatis
+                fabContainer.classList.remove("active");
             } else {
                 fabContainer.classList.remove("fab-hidden");
             }
@@ -143,7 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
             fabContainer.classList.toggle("active");
         });
         
-        // Klik di area luar mana saja untuk menutup menu mengambang secara intuitif
         document.addEventListener("click", () => {
             fabContainer.classList.remove("active");
         });
@@ -253,6 +265,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             img.dataset.index = idx;
+
+            // PRELOAD INSTAN: Siapkan gambar berikutnya dan sebelumnya di latar belakang
+            preloadAdjacentImages(images, idx);
+
+            // Jalankan animasi transisi halus dengan mengandalkan cache browser
             img.classList.add('carousel-fade-out');
             setTimeout(() => {
                 img.src = images[idx];
@@ -261,7 +278,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // E. Catat Statistik Saat Tombol WA Fokus Ditekan (Kolom D)
         if (e.target.classList.contains("track-wa-focus")) {
             recordStat('D');
             return; 
@@ -279,6 +295,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openFocusMode(card) {
         focusedCard = card;
+
+        // PRELOAD SAAT MASUK FOKUS: Langsung ambil foto aktif, berikutnya, dan sebelumnya
+        const imgEl = card.querySelector('.car-img');
+        if (imgEl && imgEl.dataset.images) {
+            const images = imgEl.dataset.images.split('&&');
+            const idx = parseInt(imgEl.dataset.index) || 0;
+            preloadAdjacentImages(images, idx);
+        }
+
         const origRect = card.getBoundingClientRect();
         const origCenter = getCenter(origRect);
 
