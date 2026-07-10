@@ -407,5 +407,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }, {passive: true});
 
-    fetchLuxuryCars();
+    // GUARD SSR: kalau server (api/index.js) sudah menyuntikkan kartu mobil
+    // duluan ke HTML, grid ini sudah punya isi -> skip fetch ulang di browser
+    // supaya tidak ada flash/render dobel. Kalau kosong (misal SSR gagal dan
+    // fallback ke index.html polos), baru fetch seperti biasa.
+    if (carGrid.children.length === 0) {
+        fetchLuxuryCars();
+    } else {
+        loadingElement.style.display = "none";
+    }
 });
