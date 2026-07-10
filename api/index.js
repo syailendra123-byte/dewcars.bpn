@@ -10,26 +10,26 @@
 // data mobil udah lengkap di dalamnya. Gak ada lagi teks "Menghubungkan
 // ke Server..." yang keluar begitu saja.
 // -----------------------------------------------------------------------------
-
+ 
 const fs = require('fs');
 const path = require('path');
-
+ 
 // --- KONFIGURASI ---
 // PENTING: samakan persis dengan yang ada di script.js
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAFCz39BZ5quPI1j65e6VSjDume9ppJkNliFqE-TYpgtv9yRifcbVctbo36IpncPs/exec";
 const WA_NUMBER = "628980008204";
-
+ 
 // Cache sederhana di memori. Ini cuma lapisan cadangan -- cache utama yang
 // bikin website kencang ada di header Cache-Control (lihat bagian bawah).
 let memoryCache = { data: null, timestamp: 0 };
 const MEMORY_CACHE_TTL = 5 * 60 * 1000; // 5 menit
-
+ 
 // Format angka harga jadi format Rupiah, contoh: 150000000 -> "Rp 150.000.000"
 function formatPrice(rawPrice) {
     const num = Number(rawPrice);
     return (!isNaN(num) && rawPrice !== "") ? `Rp ${num.toLocaleString('id-ID')}` : rawPrice;
 }
-
+ 
 // Pecah teks "Alasan harus dibeli" (format "teks ${teks2} ${teks3}") jadi baris-baris terpisah
 function parseReasons(rawText) {
     if (!rawText) return '';
@@ -43,7 +43,7 @@ function parseReasons(rawText) {
     }
     return html;
 }
-
+ 
 // Escape karakter HTML berbahaya dari data Sheet, supaya aman disuntik ke halaman
 // (mencegah data iseng di Sheet merusak tampilan atau jadi celah XSS)
 function escapeHtml(str) {
@@ -52,7 +52,7 @@ function escapeHtml(str) {
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
 }
-
+ 
 // Render satu kartu mobil jadi string HTML.
 // PENTING: struktur & class-name harus PERSIS sama dengan yang dibuat
 // renderCarCards() di script.js, supaya fitur carousel & focus-mode di
@@ -63,19 +63,19 @@ function renderCarCard(car) {
     const badgeText = isAvailable ? "Tersedia" : "Terjual";
     const formattedPrice = formatPrice(car["Harga"]);
     const reasonsHTML = parseReasons(car["Alasan harus dibeli"]);
-
+ 
     const rawImages = car["Nama gambar mobil"] || "placeholder.jpg";
     const imageArray = rawImages.split('&&').map(img => img.trim()).filter(Boolean);
     const coverImage = imageArray[0] || "placeholder.jpg";
-
+ 
     const galleryButtons = imageArray.length > 1
         ? `<button class="carousel-btn left">←</button><button class="carousel-btn right">→</button>`
         : '';
-
+ 
     const carName = escapeHtml(car["Nama Mobil"] || "Mobil");
     const waMessage = encodeURIComponent(`Halo kak, saya ingin menanyakan tentang ${carName}?`);
     const waLink = `https://wa.me/${WA_NUMBER}?text=${waMessage}`;
-
+ 
     return `
         <div class="luxury-card">
             <div class="car-image-container">
@@ -98,31 +98,35 @@ function renderCarCard(car) {
         </div>
     `;
 }
-
+ 
 // Ambil data mobil dari Apps Script, pakai cache memori dulu kalau masih fresh
 async function getCarsData() {
     const now = Date.now();
     if (memoryCache.data && (now - memoryCache.timestamp) < MEMORY_CACHE_TTL) {
         return memoryCache.data;
     }
-
+ 
     const response = await fetch(APPS_SCRIPT_URL);
     if (!response.ok) throw new Error("Gagal fetch data dari Apps Script, status: " + response.status);
     const data = await response.json();
-
+ 
     memoryCache = { data, timestamp: now };
     return data;
 }
-
+ 
 module.exports = async (req, res) => {
     try {
         const cars = await getCarsData();
         const cardsHTML = cars.map(renderCarCard).join('');
-
-        // Baca template index.html asli dari root project
-        const templatePath = path.join(process.cwd(), 'index.html');
+ 
+        // Baca template HTML asli dari root project.
+        // PENTING: sengaja dinamai "template.html" (bukan "index.html") supaya
+        // TIDAK bentrok dengan static file serving Vercel -- kalau namanya
+        // index.html, Vercel akan langsung menyajikannya duluan sebelum
+        // sempat masuk ke rewrite/function ini.
+        const templatePath = path.join(process.cwd(), 'template.html');
         let html = fs.readFileSync(templatePath, 'utf-8');
-
+ 
         // Suntik kartu-kartu mobil ke dalam grid, tampilkan grid-nya
         html = html.replace(
             '<div id="car-showcase-grid" class="car-grid" style="display: none;"></div>',
@@ -133,7 +137,7 @@ module.exports = async (req, res) => {
             '<div id="loading-element" class="loading-status">',
             '<div id="loading-element" class="loading-status" style="display: none;">'
         );
-
+ 
         // INI KUNCI PERFORMANYA:
         // s-maxage=600         -> CDN Vercel simpan HTML ini selama 10 menit,
         //                          request berikutnya disajikan INSTAN dari cache.
@@ -147,9 +151,9 @@ module.exports = async (req, res) => {
         res.status(200).send(html);
     } catch (error) {
         console.error("SSR render error:", error);
-        // Kalau Apps Script lagi down/error, fallback: kirim index.html asli
+        // Kalau Apps Script lagi down/error, fallback: kirim template.html
         // apa adanya. Website tetap jalan seperti sebelumnya (client-side fetch).
-        const templatePath = path.join(process.cwd(), 'index.html');
+        const templatePath = path.join(process.cwd(), 'template.html');
         const html = fs.readFileSync(templatePath, 'utf-8');
         res.status(200).send(html);
     }
