@@ -183,7 +183,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const carData = await response.json();
             renderCarCards(carData);
         } catch (error) {
-            loadingElement.innerHTML = `<p style="color: #e74c3c;">Gagal terhubung ke Server. Silahkan coba lagi</p>`;
+            loadingElement.innerHTML = `<p style="color: #e74c3c;">Gagal terhubung ke Server. <button id="retry-fetch-btn" style="cursor:pointer;text-decoration:underline;background:none;border:none;color:#e74c3c;font:inherit;">Coba lagi</button></p>`;
+            document.getElementById('retry-fetch-btn').addEventListener('click', fetchLuxuryCars);
         }
     }
 
