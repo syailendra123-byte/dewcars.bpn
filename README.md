@@ -1,13 +1,12 @@
 # dewcars.bpn
 Driven by Trust, Defined by Quality
 
-## Design System
-<details><summary><b>Klik disini untuk melihat Panduan Desain</b></summary>
-# Sistem Desain dari Dewcarsbpn
+## Sistem Desain
+<details><summary><b>Klik disini untuk melihat Desain</b></summary>
 
 ## 1. Tema Visual & Suasana
 
-DEWCARS BPN mewujudkan kemewahan dan kepercayaan melalui estetika gelap yang canggih dipadukan dengan aksen emas yang hangat. Desain ini membangkitkan nuansa ritel otomotif premium dengan sensibilitas minimalis kelas atas. Latar belakang abu-abu arang pekat (*deep charcoal*) dan hitam pekat menciptakan kontras dengan tipografi serif dan sans-serif yang halus, sementara emas khas (`#C5A059`) menghadirkan kehangatan dan aspirasi. Suasana keseluruhannya profesional, dapat dipercaya, dan modern—dirancang untuk menyampaikan kualitas dan perhatian terhadap detail di pasar kendaraan bekas. Ruang putih (*whitespace*) yang luas, penggunaan warna yang dibatasi, dan tipografi yang disengaja menciptakan kehadiran digital yang mudah didekati namun mewah.
+Dewcarsbpn mewujudkan kemewahan dan kepercayaan melalui estetika gelap yang canggih dipadukan dengan aksen emas yang hangat. Desain ini membangkitkan nuansa ritel otomotif premium dengan sensibilitas minimalis kelas atas. Latar belakang abu-abu arang pekat (*deep charcoal*) dan hitam pekat menciptakan kontras dengan tipografi serif dan sans-serif yang halus, sementara emas khas (`#C5A059`) menghadirkan kehangatan dan aspirasi. Suasana keseluruhannya profesional, dapat dipercaya, dan modern—dirancang untuk menyampaikan kualitas dan perhatian terhadap detail di pasar kendaraan bekas. Ruang putih (*whitespace*) yang luas, penggunaan warna yang dibatasi, dan tipografi yang disengaja menciptakan kehadiran digital yang mudah didekati namun mewah.
 
 **Karakteristik Utama**
 - Estetika yang mengutamakan warna gelap dengan warna netral pekat (`#0D0D0D`, `#121212`) sebagai permukaan utama
@@ -289,7 +288,7 @@ Digunakan untuk tombol ikon dan tampilan numerik.
 
 ### Filosofi Ruang Putih
 
-DEWCARS BPN memprioritaskan kelapangan dan ruang bernapas. Latar belakang gelap memungkinkan ruang putih yang luas tanpa terasa kosong. Bagian-bagian dipisahkan oleh celah vertikal yang substansial (minimum `60px–80px`) untuk menciptakan hierarki visual yang jelas. Padding horizontal secara konsisten meningkat dari seluler (`24px`) ke desktop (`60px`) untuk mencegah penumpukan konten. Kartu dan wadah menggunakan padding internal `30px–32px` untuk memastikan konten tidak terasa sempit. Penggunaan ruang kosong yang disengaja ini memperkuat pemosisian premium tingkat atas dan mengurangi beban kognitif.
+Dewcarsbpn memprioritaskan kelapangan dan ruang bernapas. Latar belakang gelap memungkinkan ruang putih yang luas tanpa terasa kosong. Bagian-bagian dipisahkan oleh celah vertikal yang substansial (minimum `60px–80px`) untuk menciptakan hierarki visual yang jelas. Padding horizontal secara konsisten meningkat dari seluler (`24px`) ke desktop (`60px`) untuk mencegah penumpukan konten. Kartu dan wadah menggunakan padding internal `30px–32px` untuk memastikan konten tidak terasa sempit. Penggunaan ruang kosong yang disengaja ini memperkuat pemosisian premium tingkat atas dan mengurangi beban kognitif.
 
 ### Skala Radius Batas
 
@@ -414,8 +413,5 @@ Ikuti 10 aturan ini untuk mengimplementasikan komponen antarmuka DEWCARS BPN den
 
 ## Live Web
 https://dewcarsbpn.vercel.app
-
-## Jangan Diunduh
-Ini web untuk digunakan pribadi. Jadi jangan diunduh....
 
 © 2026 dewcars.bpn. All Rights Reserved.
