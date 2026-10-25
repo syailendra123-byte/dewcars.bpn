@@ -56,6 +56,19 @@ body.stage-3 .showcase-container { opacity: 1; pointer-events: auto; }
 .badge { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 14px; border-radius: 2px; font-weight: 500; white-space: nowrap; }
 .badge-available { background-color: rgba(46, 204, 113, 0.15); color: #2ECC71; border: 1px solid rgba(46, 204, 113, 0.3); }
 .badge-sold { background-color: rgba(127, 140, 141, 0.15); color: #95A5A6; border: 1px solid rgba(127, 140, 141, 0.3); }
+.badge-dipesan { background-color: rgba(139, 109, 32, 0.9); color: #F5F5DC; border: 1px solid #DAA520; }
+
+.hidden { display: none !important; }
+
+.dimmed-placeholder { opacity: 0.5 !important; }
+
+.no-results-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: #888;
+    font-size: 0.95rem;
+}
 .car-color { font-size: 0.8rem; color: #8A8A8A; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
 .car-description { font-size: 0.95rem; color: #E0E0E0; line-height: 1.6; font-style: italic; margin-bottom: 25px; font-weight: 300; }
 .car-reasons { border-top: 1px solid rgba(255, 255, 255, 0.07); padding-top: 20px; margin-bottom: 30px; }
@@ -186,6 +199,134 @@ footer { background-color: #050505; border-top: 1px solid rgba(197, 160, 89, 0.1
 @keyframes fadeInBtn {
     0% { opacity: 0; transform: translateY(10px); }
     100% { opacity: 1; transform: translateY(0); }
+}
+
+/* --- SEARCH WRAPPER (SINGLE MORPHING ELEMENT) --- */
+#car-search-wrapper {
+    position: fixed;
+    z-index: 997;
+    transition: top 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+                right 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+                width 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.6s ease,
+                visibility 0.6s ease;
+    opacity: 0;
+    visibility: hidden;
+}
+
+body.stage-3 #car-search-wrapper {
+    opacity: 1;
+    visibility: visible;
+}
+
+#car-search-box {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 56px;
+    background: rgba(13, 13, 13, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(197, 160, 89, 0.2);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+#car-search-wrapper .search-icon {
+    width: 20px;
+    height: 20px;
+    fill: rgba(197, 160, 89, 0.6);
+    flex-shrink: 0;
+    margin-right: 12px;
+    transition: fill 0.3s ease;
+}
+
+#car-search-wrapper:focus-within .search-icon,
+#car-search-wrapper:hover .search-icon {
+    fill: #C5A059;
+}
+
+#car-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    width: 100%;
+    padding: 0;
+}
+
+#car-search-input::placeholder {
+    color: transparent;
+}
+
+#car-search-placeholder {
+    position: absolute;
+    left: 50px;
+    color: rgba(197, 160, 89, 0.5);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: opacity 0.5s ease;
+    user-select: none;
+}
+
+#car-search-wrapper:focus-within #car-search-placeholder,
+#car-search-input:not(:placeholder-shown) + #car-search-placeholder {
+    opacity: 0;
+}
+
+#car-search-clear {
+    display: none;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+#car-search-clear:hover {
+    background: rgba(197, 160, 89, 0.15);
+    color: #C5A059;
+}
+
+#car-search-input:not(:placeholder-shown) ~ #car-search-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Story position: centered, wider */
+body:not(.story-complete) #car-search-wrapper {
+    top: 72vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    max-width: 560px;
+}
+
+/* Header position: right-aligned, compact */
+body.story-complete #car-search-wrapper {
+    top: 17px;
+    right: 160px;
+    transform: translateX(0);
+    width: 320px;
+    max-width: 320px;
 }
 
 /* --- STORY SECTION NARRATIVE --- */
