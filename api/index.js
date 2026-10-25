@@ -84,9 +84,9 @@ function renderCarCard(car) {
     const rawStatus = String(car["Status"] || "").trim();
     const statusKey = rawStatus.toLowerCase();
     const isAvailable = statusKey === "tersedia";
-    const isReserved = statusKey === "dipesan";
+    const isReserved = statusKey === "booked";
     const badgeClass = isAvailable ? "badge-available" : (isReserved ? "badge-reserved" : "badge-sold");
-    const badgeText = isAvailable ? "Tersedia" : (isReserved ? "Dipesan" : (rawStatus || "Terjual"));
+    const badgeText = isAvailable ? "Tersedia" : (isReserved ? "Booked" : (rawStatus || "Terjual"));
     const formattedPrice = formatPrice(car["Harga"]);
     const reasonsHTML = parseReasons(car["Alasan harus dibeli"]);
 
