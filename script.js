@@ -196,9 +196,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const card = document.createElement("div");
             card.classList.add("luxury-card");
 
-            const isAvailable = (car["Tersedia / Terjual"] || "").toLowerCase() === "tersedia";
-            const badgeClass = isAvailable ? "badge-available" : "badge-sold";
-            const badgeText = isAvailable ? "Tersedia" : "Terjual";
+            const rawStatus = (car["Status"] || "").trim();
+            const statusKey = rawStatus.toLowerCase();
+            const isAvailable = statusKey === "tersedia";
+            const isReserved = statusKey === "dipesan";
+            const badgeClass = isAvailable ? "badge-available" : (isReserved ? "badge-reserved" : "badge-sold");
+            const badgeText = isAvailable ? "Tersedia" : (isReserved ? "Dipesan" : (rawStatus || "Terjual"));
             const rawPrice = car["Harga"];
             const formattedPrice = !isNaN(rawPrice) ? `Rp ${Number(rawPrice).toLocaleString('id-ID')}` : rawPrice;
             const reasonsHTML = parseReasons(car["Alasan harus dibeli"]);

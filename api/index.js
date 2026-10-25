@@ -81,9 +81,12 @@ function escapeHtml(str) {
 // renderCarCards() di script.js, supaya fitur carousel & focus-mode di
 // browser tetap jalan normal walau kartunya sudah dirender duluan di server.
 function renderCarCard(car) {
-    const isAvailable = (car["Tersedia / Terjual"] || "").toLowerCase() === "tersedia";
-    const badgeClass = isAvailable ? "badge-available" : "badge-sold";
-    const badgeText = isAvailable ? "Tersedia" : "Terjual";
+    const rawStatus = String(car["Status"] || "").trim();
+    const statusKey = rawStatus.toLowerCase();
+    const isAvailable = statusKey === "tersedia";
+    const isReserved = statusKey === "dipesan";
+    const badgeClass = isAvailable ? "badge-available" : (isReserved ? "badge-reserved" : "badge-sold");
+    const badgeText = isAvailable ? "Tersedia" : (isReserved ? "Dipesan" : (rawStatus || "Terjual"));
     const formattedPrice = formatPrice(car["Harga"]);
     const reasonsHTML = parseReasons(car["Alasan harus dibeli"]);
 
@@ -108,7 +111,7 @@ function renderCarCard(car) {
             <div>
                 <div class="card-header">
                     <h2 class="car-name">${carName}</h2>
-                    <span class="badge ${badgeClass}">${badgeText}</span>
+                    <span class="badge ${badgeClass}">${escapeHtml(badgeText)}</span>
                 </div>
                 <div class="car-color">Warna: ${escapeHtml(car["Warna Mobil"] || '—')}</div>
                 <p class="car-description">"${escapeHtml(car["Kata kata untuk mobil"] || '')}"</p>
