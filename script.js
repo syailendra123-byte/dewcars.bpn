@@ -16,44 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const fabContainer = document.getElementById("quick-contact");
     const fabMainBtn = document.getElementById("fab-main");
 
-    // --- SEARCH FUNCTIONALITY ---
-    const searchInput = document.getElementById("car-search-input");
-    const searchPlaceholder = document.getElementById("car-search-placeholder");
-    const searchClear = document.getElementById("car-search-clear");
-    let carNames = [];
-    let placeholderIndex = 0;
-    let placeholderInterval = null;
-    let noResultsMsg = null;
-    let allCarsData = [];
-
-    function startPlaceholderCycle() {
-        if (placeholderInterval) clearInterval(placeholderInterval);
-        if (carNames.length === 0) return;
-        
-        const cycle = () => {
-            const name = carNames[placeholderIndex];
-            searchPlaceholder.textContent = name;
-            searchPlaceholder.classList.add('dimmed-placeholder');
-            setTimeout(() => {
-                searchPlaceholder.classList.remove('dimmed-placeholder');
-            }, 2500);
-            
-            placeholderIndex = (placeholderIndex + 1) % carNames.length;
-        };
-        
-        cycle();
-        placeholderInterval = setInterval(cycle, 5000);
-    }
-
-    function showNoResults(query) {
-        if (noResultsMsg) noResultsMsg.remove();
-        
-        noResultsMsg = document.createElement('p');
-        noResultsMsg.className = 'no-results-msg';
-        noResultsMsg.textContent = 'Mobil tidak ditemukan.';
-        carGrid.appendChild(noResultsMsg);
-    }
-
     // --- SISTEM PRELOAD DAN CACHE GAMBAR ---
     const preloadedImagesCache = new Set();
 
@@ -219,7 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch(apiEndpoint);
             if (!response.ok) throw new Error("Gagal");
             const carData = await response.json();
-            allCarsData = carData;
             renderCarCards(carData);
         } catch (error) {
             loadingElement.innerHTML = `<p style="color: #e74c3c;">Gagal terhubung ke Server. <button id="retry-fetch-btn" style="cursor:pointer;text-decoration:underline;background:none;border:none;color:#e74c3c;font:inherit;">Coba lagi</button></p>`;
@@ -227,33 +188,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function renderCarCards(cars, query = "") {
+    function renderCarCards(cars) {
         carGrid.innerHTML = ""; 
         carGrid.style.display = "grid"; 
 
-        // Populate car names array for placeholder cycling
-        carNames = cars.map(c => c["Nama Mobil"] || "Mobil").filter(name => name && name.trim());
-        startPlaceholderCycle();
-
-        const cleanQuery = query.trim().toLowerCase();
-        let filteredCars = cars;
-
-        if (cleanQuery) {
-            filteredCars = cars.filter(car => {
-                const name = (car["Nama Mobil"] || "").toLowerCase();
-                return name.includes(cleanQuery);
-            });
-        }
-
-        if (filteredCars.length === 0 && cleanQuery) {
-            showNoResults(cleanQuery);
-            return;
-        }
-
-        // Remove previous no‑results message if any
-        if (noResultsMsg) noResultsMsg.remove();
-
-        filteredCars.forEach((car) => {
+        cars.forEach((car) => {
             const card = document.createElement("div");
             card.classList.add("luxury-card");
 
@@ -477,33 +416,5 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchLuxuryCars();
     } else {
         loadingElement.style.display = "none";
-    }
-
-    // --- WIRE SEARCH EVENTS ---
-    if (searchInput && searchClear) {
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value;
-            if (allCarsData.length > 0) {
-                renderCarCards(allCarsData, query);
-            }
-        });
-
-        searchClear.addEventListener('click', () => {
-            searchInput.value = '';
-            if (allCarsData.length > 0) {
-                renderCarCards(allCarsData);
-            }
-            searchInput.focus();
-        });
-
-        // Press Esc to clear
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                searchInput.value = '';
-                if (allCarsData.length > 0) {
-                    renderCarCards(allCarsData);
-                }
-            }
-        });
     }
 });
